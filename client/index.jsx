@@ -13,11 +13,21 @@ function FrontPage(){
 }
 
 
-function RandonQuesiton() {
+function RandomQuestion() {
 
     const [data, setData] = useState();
     const [error, setError] = useState();
     const[loading, setLoading] = useState(true)
+
+    async function handleAnswer(answer, id){
+        const res = await fetch("/api/question",{
+            method:"post",
+            body: JSON.stringify({answer,id}),
+            headers: {
+                "content-type": "application/json",
+            },
+        });
+    }
 
     useEffect(async ()=>{
         try{
@@ -37,18 +47,17 @@ function RandonQuesiton() {
     if (error){
         return {error}
     }
-
+    const answers = Object.keys(data.answers).filter(a => data.answers[a] != null);
     return <div>
             <h1>{data.question}</h1>
             <p>ID: {data.id} ({data.category})</p>
-
             <ul>
                 {
-                  Object.keys(data.answers)
-                        .filter(a => data.answers[a] != null)
-                        .map((a, i) => {
+                        answers.map((a, i) => {
                             return <ul key={i}>
-                                <button>{data.answers[a]}</button>
+                                <button onClick={() =>handleAnswer(a, data.question.id)}>
+                                    {data.answers[a]}
+                                </button>
                             </ul>
                         })
                 }
@@ -63,7 +72,7 @@ function App (){
     return <BrowserRouter>
         <Routes>
             <Route path={"/"} element={<FrontPage/>}></Route>
-            <Route path={"/question"} element={<RandonQuesiton/>}></Route>
+            <Route path={"/question"} element={<RandomQuestion/>}></Route>
         </Routes>
     </BrowserRouter>
 }
