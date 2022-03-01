@@ -1,7 +1,9 @@
 import * as ReactDOM from "react-dom";
 import * as React from "react";
-import {Link, Routes, Route, BrowserRouter} from "react-router-dom"
-import {useEffect, useState} from "react";
+import {useState} from "react";
+import {BrowserRouter, Link, Route, Routes} from "react-router-dom"
+import {fetchJSON, postJSON} from "./http.js";
+import {useLoading} from "./useLoading";
 
 function FrontPage(){
     return<div>
@@ -13,44 +15,14 @@ function FrontPage(){
 }
 
 function RandomQuestion() {
-    const [data, setData] = useState();
-    const [error, setError] = useState();
-    const[loading, setLoading] = useState(true)
+    const {data, error, loading, reload} = useLoading(async() => await fetchJSON("api/question"))
     const [answeredQuestion, setAnsweredQuestion] = useState();
 
-
-    async function fetchJSON(url){
-        const res = await fetch(url)
-        return setData(await res.json())
-    }
-
-    async function postJSON(url, answer){
-        const {id} = data;
-        const res = await fetch(url,{
-            method:"post",
-            body: JSON.stringify({answer,id}),
-            headers: {
-                "content-type": "application/json",
-            },
-        });
-
-        setAnsweredQuestion(await res.json())
-    }
-
-
     async function handleAnswer(answer){
-       await postJSON("/api/question", answer)
+        const {id} = data;
+        setAnsweredQuestion(await postJSON("/api/question", answer, id));
+        await reload();
     }
-
-    useEffect(async ()=>{
-        try{
-           await fetchJSON("/api/question")
-        }catch (e){
-            setError(e);
-        }finally {
-            setLoading(false);
-        }
-    }, [])
 
     if (loading){
         return "Loading..."
@@ -74,8 +46,7 @@ function RandomQuestion() {
                         })
                 }
             </ul>
-
-            <p>{answeredQuestion ? answeredQuestion.result.toString() : null}</p>
+            <p>{answeredQuestion ? "svar på forrige spørsmål:" + answeredQuestion.result.toString() : null}</p>
         </div>
 }
 
