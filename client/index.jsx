@@ -18,9 +18,9 @@ function RandomQuestion() {
     const [data, setData] = useState();
     const [error, setError] = useState();
     const[loading, setLoading] = useState(true)
-
-    async function handleAnswer(answer, id){
-        const res = await fetch("/api/question",{
+    async function handleAnswer(answer){
+        const {id} = data;
+         await fetch("/api/question",{
             method:"post",
             body: JSON.stringify({answer,id}),
             headers: {
@@ -55,7 +55,7 @@ function RandomQuestion() {
                 {
                         answers.map((a, i) => {
                             return <ul key={i}>
-                                <button onClick={() =>handleAnswer(a, data.question.id)}>
+                                <button onClick={() =>handleAnswer(a)}>
                                     {data.answers[a]}
                                 </button>
                             </ul>
