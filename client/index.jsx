@@ -18,15 +18,19 @@ function RandomQuestion() {
     const [data, setData] = useState();
     const [error, setError] = useState();
     const[loading, setLoading] = useState(true)
+    const [answeredQuestion, setAnsweredQuestion] = useState();
+
     async function handleAnswer(answer){
         const {id} = data;
-         await fetch("/api/question",{
+         const res = await fetch("/api/question",{
             method:"post",
             body: JSON.stringify({answer,id}),
             headers: {
                 "content-type": "application/json",
             },
         });
+
+        setAnsweredQuestion(await res.json())
     }
 
     useEffect(async ()=>{
@@ -62,10 +66,10 @@ function RandomQuestion() {
                         })
                 }
             </ul>
+
+            <p>{answeredQuestion ? answeredQuestion.result.toString() : null}</p>
         </div>
 }
-
-
 
 
 function App (){

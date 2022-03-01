@@ -3,6 +3,8 @@ import path from "path";
 import {randomQuestion, isCorrectAnswer,Questions } from "./questions.js"
 import bodyParser from "body-parser";
 const app = express();
+
+
 app.use(bodyParser.json())
 
 app.get("/api", (req,res)=>{
@@ -17,12 +19,12 @@ app.get("/api/question", (req,res)=>{
 app.post("/api/question", (req,res) =>{
     const {id, answer} = req.body;
     const question = Questions.find(q=>q.id===id);
-    console.log(question);
     if(!question){
         return res.sendStatus(404);
     }
     if(isCorrectAnswer(question,answer)){
         res.json({result:true})
+
     }else{
         res.json({result:false})
     }
