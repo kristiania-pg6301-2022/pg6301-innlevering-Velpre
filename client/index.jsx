@@ -12,17 +12,21 @@ function FrontPage(){
     </div>
 }
 
-
 function RandomQuestion() {
-
     const [data, setData] = useState();
     const [error, setError] = useState();
     const[loading, setLoading] = useState(true)
     const [answeredQuestion, setAnsweredQuestion] = useState();
 
-    async function handleAnswer(answer){
+
+    async function fetchJSON(url){
+        const res = await fetch(url)
+        return setData(await res.json())
+    }
+
+    async function postJSON(url, answer){
         const {id} = data;
-         const res = await fetch("/api/question",{
+        const res = await fetch(url,{
             method:"post",
             body: JSON.stringify({answer,id}),
             headers: {
@@ -33,10 +37,14 @@ function RandomQuestion() {
         setAnsweredQuestion(await res.json())
     }
 
+
+    async function handleAnswer(answer){
+       await postJSON("/api/question", answer)
+    }
+
     useEffect(async ()=>{
         try{
-            const res = await fetch("/api/question")
-            setData(await res.json())
+           await fetchJSON("/api/question")
         }catch (e){
             setError(e);
         }finally {
