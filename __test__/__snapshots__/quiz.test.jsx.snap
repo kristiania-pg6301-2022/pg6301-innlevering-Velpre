@@ -1,0 +1,3 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`quiz app shows front page 1`] = `" <div><h1>Start Quiz</h1><ul><li><a href=\\"/question\\">Choose question</a></li></ul></div>"`;
