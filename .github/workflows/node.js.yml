@@ -21,7 +21,7 @@ jobs:
           node-version: 16.x
           cache: 'npm'
       - run: cd client && npm ci
-      - run: cd client && npm run verify
+      - run: cd server && npm run verify
       - name: Coveralls
         uses: coverallsapp/github-action@master
         with:
