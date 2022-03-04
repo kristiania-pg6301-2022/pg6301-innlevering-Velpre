@@ -5,6 +5,18 @@ import { fetchJSON, postJSON } from "./http.js";
 import { useLoading } from "./useLoading";
 
 export function FrontPage() {
+    const { data, error, loading, reload } = useLoading(
+        async () => await fetch("api/")
+    );
+
+    if (loading) {
+        return "Loading...";
+    }
+
+    if (error) {
+        return <p>{error.toString()}</p>;
+    }
+
   return (
     <div>
       <h1>Start Quiz</h1>

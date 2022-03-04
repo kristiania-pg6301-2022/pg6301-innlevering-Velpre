@@ -3,7 +3,11 @@ export const QuizApp = express.Router();
 import { randomQuestion, isCorrectAnswer, Questions } from "./questions.js";
 
 QuizApp.get("/", (req, res) => {
-    res.send("første");
+    if(req.signedCookies.score){
+        res.clearCookie("score");
+    }else{
+        res.sendStatus(204);
+    }
 });
 
 QuizApp.get("/question", (req, res) => {
