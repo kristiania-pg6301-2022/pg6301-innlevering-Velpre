@@ -5,17 +5,17 @@ import { fetchJSON, postJSON } from "./http.js";
 import { useLoading } from "./useLoading";
 
 export function FrontPage() {
-    const { data, error, loading, reload } = useLoading(
-        async () => await fetch("api/")
-    );
+  const { data, error, loading, reload } = useLoading(
+    async () => await fetchJSON("/api")
+  );
 
-    if (loading) {
-        return "Loading...";
-    }
+  if (loading) {
+    return "Loading...";
+  }
 
-    if (error) {
-        return <p>{error.toString()}</p>;
-    }
+  if (error) {
+    return <p>{error.toString()}</p>;
+  }
 
   return (
     <div>
@@ -92,7 +92,6 @@ function Score() {
   return (
     <div>
       <h1>
-        {" "}
         Out of {answers} questions you have answered {correct} correctly
       </h1>
       <ul>

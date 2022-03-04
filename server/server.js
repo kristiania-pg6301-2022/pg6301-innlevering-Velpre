@@ -5,7 +5,7 @@ import cookieParser from "cookie-parser";
 import dotenv from "dotenv";
 import { QuizApp } from "./quizApp.js";
 
-dotenv.config()
+dotenv.config();
 const app = express();
 app.use(bodyParser.json());
 app.use(cookieParser(process.env.COOKIE_SECRET));
