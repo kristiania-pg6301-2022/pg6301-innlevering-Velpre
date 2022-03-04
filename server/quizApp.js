@@ -17,9 +17,25 @@ QuizApp.post("/question", (req, res) => {
     if (!question) {
         return res.sendStatus(404);
     }
+    // score
+    const score = req.signedCookies.score
+        ? JSON.parse(req.signedCookies.score)
+        : { answers: 0, correct: 0 };
+    score.answers += 1;
     if (isCorrectAnswer(question, answer)) {
+        // adding correct ans
+        score.correct += 1;
+        // signing cookie
+        res.cookie("score", JSON.stringify(score), { signed: true });
+        // response:
         res.json({ result: true });
     } else {
+        res.cookie("score", JSON.stringify(score), { signed: true });
         res.json({ result: false });
     }
 });
+
+QuizApp.get("/score",(req,res)=>{
+    const score = req.signedCookies.score ? JSON.parse(req.signedCookies.score) : { answer :0, correct: 0};
+    res.send(score)
+})
