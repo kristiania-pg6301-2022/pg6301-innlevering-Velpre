@@ -19,7 +19,7 @@ export function FrontPage() {
 
   return (
     <div>
-      <h1>Start Quiz</h1>
+      <h1>Start Quizzzzz</h1>
       <ul>
         <li>
           <Link to={"/question"}>Choose question</Link>
