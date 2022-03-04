@@ -12,6 +12,9 @@ export function FrontPage() {
         <li>
           <Link to={"/question"}>Choose question</Link>
         </li>
+        <li>
+          <Link to={"/score"}>Display Score</Link>
+        </li>
       </ul>
     </div>
   );
@@ -42,9 +45,6 @@ function RandomQuestion() {
   return (
     <div>
       <h1>{data.question}</h1>
-      <p>
-        ID: {data.id} ({data.category})
-      </p>
       <ul>
         {answers.map((a, i) => {
           return (
@@ -59,6 +59,38 @@ function RandomQuestion() {
           ? "svar på forrige spørsmål:" + answeredQuestion.result.toString()
           : null}
       </p>
+      <Link to={"/score"}> Check Score</Link>
+    </div>
+  );
+}
+
+function Score() {
+  const { data, error, loading, reload } = useLoading(
+    async () => await fetchJSON("api/score")
+  );
+  if (loading) {
+    return "Loading...";
+  }
+
+  if (error) {
+    return { error };
+  }
+  const { answers, correct } = data;
+
+  return (
+    <div>
+      <h1>
+        {" "}
+        Out of {answers} questions you have answered {correct} correctly
+      </h1>
+      <ul>
+        <li>
+          <Link to={"/question"}>Next question</Link>
+        </li>
+        <li>
+          <Link to={"/"}>Close Quiz</Link>
+        </li>
+      </ul>
     </div>
   );
 }
@@ -69,6 +101,7 @@ export function App() {
       <Routes>
         <Route path={"/"} element={<FrontPage />}></Route>
         <Route path={"/question"} element={<RandomQuestion />}></Route>
+        <Route path={"/score"} element={<Score />}></Route>
       </Routes>
     </BrowserRouter>
   );
