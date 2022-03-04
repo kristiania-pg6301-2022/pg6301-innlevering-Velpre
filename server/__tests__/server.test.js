@@ -2,9 +2,13 @@ import express from "express";
 import bodyParser from "body-parser";
 import request from "supertest";
 import { QuizApp } from "../quizApp.js"
+import cookieParser from "cookie-parser";
+import dotenv from "dotenv";
 
+dotenv.config()
 const app = express();
 app.use(bodyParser.json());
+app.use(cookieParser(process.env.COOKIE_SECRET))
 app.use("/api",QuizApp );
 
 
@@ -32,5 +36,16 @@ describe("the quiz app", () =>{
             .post("/api/question")
             .send({ id: 987, answer: "answer_a" })
             .expect({ result: false });
+    });
+
+    it("counts stats for quiz, n right and n answers", async () => {
+        const agent = request.agent(app);
+        await agent.post("/api/question").send({ id: 987, answer: "answer_c" });
+        await agent.post("/api/question").send({ id: 987, answer: "answer_a" });
+        await agent.post("/api/question").send({ id: 983, answer: "answer_a" });
+        await agent
+            .get("/api/score")
+            .expect(200)
+            .expect({ answers: 3, correct: 2 });
     });
 })
