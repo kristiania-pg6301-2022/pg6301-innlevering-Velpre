@@ -20,7 +20,6 @@ jobs:
       - run: npm ci
       - run: npm install
         working-directory: server
-      - run: npm install
       - run: npm run verify
       - name: Coveralls
         uses: coverallsapp/github-action@master
