@@ -1,26 +1,22 @@
-
-name: Node.js CI
+name: Run test
 
 on:
   push:
-    branches: [ main ]
-  pull_request:
-    branches: [ main ]
+    branches:
+      - main
 
 jobs:
+
   test:
-
     runs-on: ubuntu-latest
-
+    timeout-minutes: 2
     steps:
       - uses: actions/checkout@v2
       - uses: actions/setup-node@v2
         with:
           node-version: 16.x
-          cache: 'npm'
+          cache: "npm"
       - run: npm ci
-      - run: npm install
-        working-directory: server
       - run: npm run verify
       - name: Coveralls
         uses: coverallsapp/github-action@master
