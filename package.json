@@ -13,24 +13,22 @@
     "build": "npm run build:server && npm run build:client",
     "build:client": "cd client && npm run build",
     "build:server": "cd server && npm run build",
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "jest",
     "prepare": "husky install",
-    "verify": "jest --collectCoverage",
-    "test": "jest"
+    "verify": "jest --collectCoverage"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "concurrently": "^7.0.0",
-    "husky": "^7.0.4",
-    "prettier": "^2.5.1",
     "@babel/preset-env": "^7.16.11",
     "@babel/preset-react": "^7.16.7",
     "babel-jest": "^27.5.1",
+    "concurrently": "^7.0.0",
+    "husky": "^7.0.4",
+    "prettier": "^2.5.1",
     "supertest": "^6.2.2"
   },
-
   "jest": {
     "collectCoverage": true,
     "testEnvironment": "jsdom",
@@ -40,8 +38,15 @@
   },
   "babel": {
     "presets": [
-      "@babel/preset-env",
-      "@babel/preset-react"
+      [
+        "@babel/preset-env",
+        "@babel/preset-react",
+        {
+          "targets": {
+            "node": "current"
+          }
+        }
+      ]
     ]
   }
 }
