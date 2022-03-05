@@ -32,7 +32,7 @@ export function FrontPage() {
   );
 }
 
-function RandomQuestion() {
+export function RandomQuestion() {
   const { data, error, loading, reload } = useLoading(
     async () => await fetchJSON("api/question")
   );
